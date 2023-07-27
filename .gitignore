@@ -1,0 +1,5 @@
+target/
+temp/
+.cargo/
+app.config
+Cargo.lock

@@ -1,0 +1,43 @@
+[package]
+name = "dbpool"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+async-trait = { version = "0.1.56", optional = true }
+lazy_static = { version = "1.4.0", optional = true }
+serde = { version = "1.0.138", features = [ "derive" ], optional = true }
+serde_json = { version = "1.0.82", optional = true }
+regex = { version = "1.6.0", optional = true }
+paste = { version = "1.0.9", optional = true }
+chrono = { version = "0.4.22", features = [ "serde" ], optional = true }
+rust_decimal = { version = "1.26.1", features = [ "serde", "serde-with-str", "db-tokio-postgres" ], optional = true }
+uuid = { version = "1.1.2", features = [ "v4", "serde" ], optional = true }
+deadpool = { version = "0.9.5", features = [ "managed", "rt_tokio_1", ], optional = true}
+tokio = { version = "1.20.1", features = [ "rt", "time", "net" ], optional = true }
+tokio-postgres = { version = "0.7.7", features = [ "runtime", "with-chrono-0_4", "with-uuid-1", "with-serde_json-1" ], optional = true}
+postgres-types = { version = "0.2.4", features = [ "derive", "with-chrono-0_4", "with-uuid-1", "with-serde_json-1" ], optional = true}
+openssl = { version = "0.10.40", optional = true }
+postgres-openssl = { version = "0.5.0", optional = true }
+futures = { version = "0.3.21", optional = true }
+csv = { version = "1.1.6", optional = true }
+tiberius = { version = "0.11.2", default-features = false, features = [ "vendored-openssl", "tds73", "chrono", "rust_decimal", "bigdecimal", "sql-browser-tokio"], optional = true}
+tokio-util = { version = "0.7.4", default-features = false, features = [ "compat" ], optional = true }
+rusqlite = { version = "0.28.0", default-features = false, features = [ "bundled-full" ], optional = true }
+xlsxwriter = { package = "rust_xlsxwriter", version = "0.19.0", optional = true }
+xlsxreader = { package = "calamine", version = "0.19.1", features = [ "dates" ], optional = true }
+indexmap = { version = "1.9.2", default-features = false, features = ["serde-1", "std" ], optional = true }
+thiserror = { version = "1.0.38" }
+
+[dev-dependencies]
+tokio = { version = "1.20.1", features = [ "macros"] }
+utils = { git = "https://github.com/CataMark/rs_utils", branch = "master", default-features = false, features = [ "envars" ]}
+
+[features]
+default = ["generics", "pgsql", "mssql", "sqlite"]
+generics = ["dep:regex", "dep:paste", "dep:lazy_static", "dep:serde", "dep:serde_json", "dep:chrono", "dep:rust_decimal", "dep:uuid", "dep:indexmap"]
+pgsql = ["generics", "dep:async-trait", "dep:deadpool", "dep:tokio", "dep:tokio-postgres", "dep:postgres-types", "dep:openssl", "dep:postgres-openssl", "dep:futures", "dep:csv", "dep:xlsxwriter", "dep:xlsxreader"]
+mssql = ["generics", "dep:async-trait", "dep:deadpool", "dep:tokio", "dep:tokio-util", "dep:tiberius", "dep:openssl", "dep:futures", "dep:csv", "dep:xlsxwriter", "dep:xlsxreader"]
+sqlite = ["generics", "dep:async-trait", "dep:rusqlite", "dep:deadpool", "dep:futures", "dep:csv", "dep:xlsxwriter", "dep:xlsxreader"]
